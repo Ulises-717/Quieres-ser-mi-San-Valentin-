@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para Ti ❤️</title>
+
+<style>
+body{
+margin:0;
+padding:0;
+background: linear-gradient(135deg,#ff4e8d,#ff9a9e);
+font-family: Arial, sans-serif;
+color:white;
+text-align:center;
+overflow:hidden;
+}
+
+.container{
+position:relative;
+top:30vh;
+z-index:2;
+}
+
+button{
+padding:15px 30px;
+font-size:18px;
+margin:10px;
+background:white;
+color:#ff4e8d;
+border:none;
+border-radius:30px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#ffe3ec;
+transform: scale(1.1);
+}
+
+/* Corazones */
+.heart{
+position:absolute;
+color:white;
+font-size:20px;
+animation: float 6s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh);opacity:1;}
+100%{transform:translateY(-10vh);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Música -->
+<audio autoplay loop>
+<source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mp3">
+</audio>
+
+<div class="container" id="contenido">
+
+<h1>¿Aceptas ser mi San Valentín? 💕</h1>
+
+<button onclick="acepto()">Sí ❤️</button>
+<button onclick="acepto()">Obvio que sí 😏</button>
+
+</div>
+
+<script>
+
+/* Cuando acepta */
+function acepto(){
+document.getElementById("contenido").innerHTML = `
+<h1>Feliz San Valentín 💖</h1>
+<p>Desde que bailamos juntos supe que algo especial estaba empezando...</p>
+<p>¿Quieres seguir escribiendo esta historia conmigo? 💃🕺</p>
+<a href="https://wa.me/5215512345678?text=Si%20quiero%20seguir%20bailando%20contigo%20❤️">
+<button>Responder por WhatsApp 💌</button>
+</a>
+`;
+}
+
+/* Generar corazones */
+function crearCorazon(){
+const heart = document.createElement("div");
+heart.classList.add("heart");
+heart.innerHTML="❤️";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(Math.random()*20+10)+"px";
+heart.style.animationDuration=(Math.random()*3+3)+"s";
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},6000);
+}
+
+setInterval(crearCorazon,300);
+
+</script>
+
+</body>
+</html>
