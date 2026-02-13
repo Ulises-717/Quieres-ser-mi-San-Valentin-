@@ -8,17 +8,43 @@
 body{
 margin:0;
 padding:0;
-background: linear-gradient(135deg,#ff4e8d,#ff9a9e);
-font-family: Arial, sans-serif;
+height:100vh;
+background: radial-gradient(circle at top, #ff4e8d, #8a2be2);
+font-family: 'Segoe UI', sans-serif;
 color:white;
 text-align:center;
 overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+}
+
+/* Animación fondo luces */
+body::before{
+content:"";
+position:absolute;
+width:200%;
+height:200%;
+background: repeating-radial-gradient(circle, rgba(255,255,255,0.05) 0px, transparent 2px);
+animation: moveBg 20s linear infinite;
+z-index:0;
+}
+
+@keyframes moveBg{
+from{transform:translate(0,0);}
+to{transform:translate(-200px,-200px);}
 }
 
 .container{
 position:relative;
-top:30vh;
 z-index:2;
+animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:scale(0.8);}
+to{opacity:1; transform:scale(1);}
 }
 
 button{
@@ -38,26 +64,30 @@ background:#ffe3ec;
 transform: scale(1.1);
 }
 
+/* Botón NO que se mueve */
+#no{
+position:relative;
+}
+
 /* Corazones */
 .heart{
 position:absolute;
-color:white;
 font-size:20px;
 animation: float 6s linear infinite;
+opacity:0.8;
 }
 
 @keyframes float{
-0%{transform:translateY(100vh);opacity:1;}
-100%{transform:translateY(-10vh);opacity:0;}
+0%{transform:translateY(100vh) scale(0.5); opacity:1;}
+100%{transform:translateY(-10vh) scale(1.2); opacity:0;}
 }
 </style>
 </head>
 
-<body>
+<body onclick="playMusic()">
 
-<!-- Música -->
-<audio autoplay loop>
-<source src="https://youtu.be/-5YfRX9Qh5M?si=IwYWLd6Flnvw6K5t" type="audio/mp3">
+<audio id="music" loop>
+<source src="https://www.dropbox.com/scl/fi/pckd37iharc9wvqs6fwn6/VEN-DEV-RAME-OTRA-VEZ-Guaynaa-Visualizer.m4a?rlkey=ihn4fe2lnmsvd7nwdfikvu7nj&st=ydm1zffp&dl=0" type="audio/mp3">
 </audio>
 
 <div class="container" id="contenido">
@@ -66,42 +96,55 @@ animation: float 6s linear infinite;
 
 <button onclick="acepto()">Sí ❤️</button>
 <button onclick="acepto()">Obvio que sí 😏</button>
+<button id="no" onmouseover="moverNo()">No 😅</button>
 
 </div>
 
 <script>
 
+/* Activar música al tocar */
+function playMusic(){
+document.getElementById("music").play();
+}
+
+/* Botón NO escapa */
+function moverNo(){
+const btn = document.getElementById("no");
+btn.style.position="absolute";
+btn.style.left=Math.random()*80+"vw";
+btn.style.top=Math.random()*80+"vh";
+}
+
 /* Cuando acepta */
 function acepto(){
 document.getElementById("contenido").innerHTML = `
-<h1>Feliz San Valentín 💖</h1>
+<h1 style="animation:fadeIn 2s;">Feliz San Valentín 💖</h1>
 <p>Desde que bailamos juntos supe que algo especial estaba empezando...</p>
-<p>¿Quieres seguir escribiendo esta historia conmigo? 💃🕺</p>
+<p>Quiero seguir escribiendo esta historia contigo 💃🕺</p>
 <a href="https://wa.me/5212461718431?text=Si%20quiero%20seguir%20bailando%20contigo%20❤️">
 <button>Responder por WhatsApp 💌</button>
 </a>
 `;
 }
 
-/* Generar corazones */
+/* Corazones dinámicos */
 function crearCorazon(){
 const heart = document.createElement("div");
 heart.classList.add("heart");
-heart.innerHTML="❤️";
+heart.innerHTML=["❤️","💖","💕","💘"][Math.floor(Math.random()*4)];
 heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=(Math.random()*20+10)+"px";
+heart.style.fontSize=(Math.random()*30+10)+"px";
 heart.style.animationDuration=(Math.random()*3+3)+"s";
 document.body.appendChild(heart);
 
-setTimeout(()=>{
-heart.remove();
-},6000);
+setTimeout(()=>{heart.remove();},6000);
 }
 
-setInterval(crearCorazon,300);
+setInterval(crearCorazon,250);
 
 </script>
 
 </body>
 </html>
+
 
