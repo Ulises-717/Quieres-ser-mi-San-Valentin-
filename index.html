@@ -15,9 +15,10 @@ justify-content:center;
 align-items:center;
 overflow:hidden;
 color:white;
+background:black;
 }
 
-/* FOTO DE FONDO */
+/* FOTO HD */
 body::before{
 content:"";
 position:fixed;
@@ -25,8 +26,10 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:url("nosotros.png") center/cover no-repeat;
-z-index:-2;
+background:url("nosotros.png") center center / cover no-repeat;
+background-attachment:fixed;
+image-rendering: auto;
+z-index:-3;
 }
 
 body::after{
@@ -36,13 +39,14 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.55);
-z-index:-1;
+background:rgba(0,0,0,0.5);
+z-index:-2;
 }
 
 /* CONTENIDO */
 .container{
 text-align:center;
+z-index:5;
 animation:fadeIn 2s ease;
 }
 
@@ -54,6 +58,7 @@ to{opacity:1;transform:scale(1);}
 h1{
 font-size:3em;
 margin-bottom:20px;
+text-shadow:0 0 20px rgba(255,255,255,0.6);
 }
 
 button{
@@ -77,19 +82,20 @@ transform:scale(1.1);
 position:fixed;
 top:50%;
 left:50%;
-transform:translate(-50%,-50%) scale(0);
-width:320px;
+transform:translate(-50%,-50%) scaleY(0);
+transform-origin:top;
+width:340px;
 background:#fff;
 color:#333;
 padding:25px;
-border-radius:12px;
-box-shadow:0 15px 40px rgba(0,0,0,0.5);
-z-index:10;
-transition:0.6s ease;
+border-radius:15px;
+box-shadow:0 20px 50px rgba(0,0,0,0.6);
+z-index:20;
+transition:0.7s ease;
 }
 
 .letter.open{
-transform:translate(-50%,-50%) scale(1);
+transform:translate(-50%,-50%) scaleY(1);
 }
 
 .letter h2{
@@ -97,12 +103,28 @@ margin-bottom:10px;
 color:#ff4e8d;
 }
 
-/* FUEGOS ARTIFICIALES */
+/* BRILLOS MAGICOS */
+.sparkle{
+position:absolute;
+width:6px;
+height:6px;
+background:white;
+border-radius:50%;
+box-shadow:0 0 15px white;
+animation:twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle{
+from{opacity:0.3;transform:scale(0.5);}
+to{opacity:1;transform:scale(1.5);}
+}
+
 canvas{
 position:fixed;
 top:0;
 left:0;
 pointer-events:none;
+z-index:10;
 }
 </style>
 </head>
@@ -110,6 +132,10 @@ pointer-events:none;
 <body>
 
 <canvas id="fireworks"></canvas>
+
+<audio id="music">
+<source src="https://www.dropbox.com/scl/fi/pckd37iharc9wvqs6fwn6/VEN-DEV-RAME-OTRA-VEZ-Guaynaa-Visualizer.m4a?rlkey=ihn4fe2lnmsvd7nwdfikvu7nj&st=ydm1zffp&dl=0" type="audio/mp3">
+</audio>
 
 <div class="container" id="contenido">
 <h1 id="typing"></h1>
@@ -121,8 +147,8 @@ pointer-events:none;
 <div class="letter" id="carta">
 <h2>Para Andy 💌</h2>
 <p>
-Desde que bailamos juntos supe que algo especial estaba empezando...  
-No fue solo el ritmo, fue tu sonrisa, tu mirada y la forma en que conectamos.  
+Desde que bailamos juntos supe que eras diferente…  
+No fue solo el ritmo, fue la conexión.  
 Quiero seguir escribiendo esta historia contigo. 💃🕺  
 </p>
 <br>
@@ -145,7 +171,18 @@ setTimeout(typeWriter,150);
 }
 typeWriter();
 
-/* FUEGOS ARTIFICIALES PRO */
+/* BRILLOS MAGICOS */
+function createSparkle(){
+let s=document.createElement("div");
+s.className="sparkle";
+s.style.left=Math.random()*100+"vw";
+s.style.top=Math.random()*100+"vh";
+document.body.appendChild(s);
+setTimeout(()=>s.remove(),2000);
+}
+setInterval(createSparkle,300);
+
+/* FUEGOS ARTIFICIALES DISNEY FULL */
 const canvas=document.getElementById("fireworks");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
@@ -154,14 +191,14 @@ canvas.height=window.innerHeight;
 let particles=[];
 
 function createFirework(x,y){
-for(let i=0;i<80;i++){
+for(let i=0;i<150;i++){
 particles.push({
 x:x,
 y:y,
 angle:Math.random()*2*Math.PI,
-speed:Math.random()*5+2,
+speed:Math.random()*7+2,
 radius:2,
-life:100,
+life:120,
 color:`hsl(${Math.random()*360},100%,60%)`
 });
 }
@@ -177,18 +214,23 @@ ctx.beginPath();
 ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
 ctx.fillStyle=p.color;
 ctx.fill();
-if(p.life<=0){
-particles.splice(index,1);
-}
+if(p.life<=0){particles.splice(index,1);}
 });
 requestAnimationFrame(animate);
 }
 animate();
 
 function acepto(){
-createFirework(canvas.width/2,canvas.height/2);
+for(let i=0;i<5;i++){
+setTimeout(()=>{
+createFirework(Math.random()*canvas.width,Math.random()*canvas.height);
+},i*400);
+}
+
+/* Abrir carta */
 setTimeout(()=>{
 document.getElementById("carta").classList.add("open");
+document.getElementById("music").play();
 },800);
 }
 
